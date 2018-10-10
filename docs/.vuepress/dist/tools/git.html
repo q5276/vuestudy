@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>版本管理工具：分布式GIT和集中式SVN | Vue教程</title>
+    <meta name="description" content="Tingno记编写的VUE教程">
+    
+    
+    <link rel="preload" href="/docs/assets/css/styles.e8e3fc9d.css" as="style"><link rel="preload" href="/docs/assets/js/app.e8e3fc9d.js" as="script"><link rel="preload" href="/docs/assets/js/12.daa5deb7.js" as="script"><link rel="prefetch" href="/docs/assets/js/5.f905520b.js"><link rel="prefetch" href="/docs/assets/css/1.styles.5a8ea794.css"><link rel="prefetch" href="/docs/assets/js/1.5a8ea794.js"><link rel="prefetch" href="/docs/assets/css/2.styles.79c81c9d.css"><link rel="prefetch" href="/docs/assets/js/2.79c81c9d.js"><link rel="prefetch" href="/docs/assets/js/3.35046238.js"><link rel="prefetch" href="/docs/assets/js/4.66a56e2e.js"><link rel="prefetch" href="/docs/assets/js/6.02c02108.js"><link rel="prefetch" href="/docs/assets/js/7.c7e55377.js"><link rel="prefetch" href="/docs/assets/js/8.5cd1c99f.js"><link rel="prefetch" href="/docs/assets/js/9.88af5de7.js"><link rel="prefetch" href="/docs/assets/js/10.30788814.js"><link rel="prefetch" href="/docs/assets/js/11.3b39a636.js"><link rel="prefetch" href="/docs/assets/js/13.cce434ac.js">
+    <link rel="stylesheet" href="/docs/assets/css/1.styles.5a8ea794.css"><link rel="stylesheet" href="/docs/assets/css/2.styles.79c81c9d.css"><link rel="stylesheet" href="/docs/assets/css/styles.e8e3fc9d.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/docs/" class="home-link router-link-active"><!----> <span class="site-name">Vue教程</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/docs/" class="nav-link">首页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">基础</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/base/base.html" class="nav-link">入门</a></li><li class="dropdown-item"><!----> <a href="/docs/base/file.html" class="nav-link">常见文件</a></li><li class="dropdown-item"><!----> <a href="/docs/base/package.html" class="nav-link">组件化</a></li><li class="dropdown-item"><!----> <a href="/docs/base/es6.html" class="nav-link">ES6新特性</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">核心</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/core/Route.html" class="nav-link">路由Router</a></li><li class="dropdown-item"><!----> <a href="/docs/core/Vuex.html" class="nav-link">状态Vuex</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">工具</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/tools/git.html" class="nav-link router-link-exact-active router-link-active">git</a></li><li class="dropdown-item"><!----> <a href="/docs/tools/webpack.html" class="nav-link">webpack</a></li></ul></div></div><div class="nav-item"><a href="https://notes.tingno.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/vuejs/vuepress" target="_blank" rel="noopener noreferrer" class="repo-link">
+    查看源码
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/docs/" class="nav-link">首页</a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">基础</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/base/base.html" class="nav-link">入门</a></li><li class="dropdown-item"><!----> <a href="/docs/base/file.html" class="nav-link">常见文件</a></li><li class="dropdown-item"><!----> <a href="/docs/base/package.html" class="nav-link">组件化</a></li><li class="dropdown-item"><!----> <a href="/docs/base/es6.html" class="nav-link">ES6新特性</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">核心</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/core/Route.html" class="nav-link">路由Router</a></li><li class="dropdown-item"><!----> <a href="/docs/core/Vuex.html" class="nav-link">状态Vuex</a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title">工具</span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/docs/tools/git.html" class="nav-link router-link-exact-active router-link-active">git</a></li><li class="dropdown-item"><!----> <a href="/docs/tools/webpack.html" class="nav-link">webpack</a></li></ul></div></div><div class="nav-item"><a href="https://notes.tingno.com" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  博客
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/vuejs/vuepress" target="_blank" rel="noopener noreferrer" class="repo-link">
+    查看源码
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><a href="/docs/" class="sidebar-link">Home</a></li><li><a href="/docs/base/base.html" class="sidebar-link">入门</a></li><li><a href="/docs/base/es6.html" class="sidebar-link">ES6新特性</a></li><li><a href="/docs/base/file.html" class="sidebar-link">常见文件</a></li><li><a href="/docs/base/package.html" class="sidebar-link">组件化</a></li><li><div class="sidebar-group"><p class="sidebar-heading"><span>核心</span> <!----></p> <ul class="sidebar-group-items"><li><a href="/docs/core/Route.html" class="sidebar-link">路由Router</a></li><li><a href="/docs/core/Vuex.html" class="sidebar-link">状态Vuex</a></li></ul></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading open"><span>工具</span> <span class="arrow down"></span></p> <ul class="sidebar-group-items"><li><a href="/docs/tools/git.html" class="active sidebar-link">版本管理工具git</a></li><li><a href="/docs/tools/webpack.html" class="sidebar-link">webpack</a></li></ul></div></li></ul> </div> <div class="page"> <div class="content"><p>中间罗里吧嗦的都是些帮助理解的东西，不想看直接翻转到最后看总结。</p> <p>在项目开发过程中，经常有做着做着推翻重来的时候。在没有版本管理工具的时候咋办，自己复制个备份，完美解决。但是多人开发协作，你也做了我也做了，如何合并，合并完出问题想找找谁写的bug，合并完又做错了想回退到上个版本，上上个版本，开发版本、上线版本、测试版本都要搞等等问题都需要的时候，版本管理工具方便解决了这些问题。版本管理工具的核心也是不断保存各种版本，保存各种版本的修改，用算法方便查询及调整需要使用的版本和分支。</p> <h1 id="版本管理工具：分布式git和集中式svn"><a href="#版本管理工具：分布式git和集中式svn" aria-hidden="true" class="header-anchor">#</a> 版本管理工具：分布式GIT和集中式SVN</h1> <p>版本管理工具中，流行的工具有主要是Git和svn。</p> <p>svn属于集中式代表，搭建一个服务器，需要开发的时候拉最新代码开始做，做完传上去。</p> <p>git属于分布式代表，是所有需要使用的机器上都有完整的版本，需要的合并的时候我们同步下就行。但是 实际项目应用中，应该很少这么干的，反而也会有一个服务器存所有代码，推拉代码都是从服务器上。原因嘛，管理体制，网络状况，在岗状态都有可能影响。</p> <h1 id="git安装"><a href="#git安装" aria-hidden="true" class="header-anchor">#</a> Git安装</h1> <p>Git安装还是比较简单的，没什么好配置的。直接搜索git，去git官方下载页面。一般会自动识别你当前电脑版本并自动开始下载的。下载完之后运行，下一步下一步就结束了。</p> <p>安装完之后，使用cmd命令git --version能正常弹出版本信息，说明安装成功。</p> <p>然后进行自报家名，配置下姓名和邮箱</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;email@example.com&quot;
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h1 id="创建版本库"><a href="#创建版本库" aria-hidden="true" class="header-anchor">#</a> 创建版本库</h1> <p>自己用的话，创建文件夹，cmd到对应文件夹下，然后使用git init命令进行创建，根据提示来就行。</p> <p>公司已经使用线上的gitlab之类的版本建设好之后，直接使用git clone &lt;线上地址&gt;，将线上版本复制到本地，也叫检出、克隆，中间需要输入密码 。复制好之后需要进入对应的目录下。</p> <p>小技巧：检出远程仓库到本地之后，后续所有推拉代码都需要输入这个密码，如果你对办公室小伙伴放心或者自己有离席锁屏的习惯，克隆的时候线上地址里面直接把密码也填进去，这样推拉代码的时候刷刷的。格式：</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>git clone username:password@path.git
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><h1 id="分支操作"><a href="#分支操作" aria-hidden="true" class="header-anchor">#</a> 分支操作</h1> <p>创建完版本库之后，默认是在master分支下。分支的官方解释是：分支是用来将特性开发绝缘开来的。大致的意思是，在分支上开发的时候不影响其他的分支。</p> <p>实际在开发的时候，最少分为开发分支和生产分支。根据需要可以再进行增加测试分支，处理bug的分支，新功能开发分支等等。分支上面的功能开发完整并测试没什么问题之后，就可以逐步向上合并进一步测试。</p> <p>场景一：新功能开发开发完之后，合并到开发分支，整合相关模块之后，合并到测试分支，测试分支测试没问题之后，合并到生产分支。生产分支打包发布上线。</p> <p>场景二：线上发现紧急bug，在线上版本新建bug分支，进行修复测试之后，再进行合并到线上版本进行紧急维护。</p> <p>按照develop分支举例</p> <ul><li>创建develop分支并切过去 git checkout -b develop</li> <li>切换回主分支 git checkout master</li> <li>删除develop分支  git checkout -d develop</li> <li>查看所有分支 git branch -a</li> <li>创建与远程同名的develop分支，并进行绑定 git checkout -t origin/develop</li></ul> <h1 id="工作流分支"><a href="#工作流分支" aria-hidden="true" class="header-anchor">#</a> 工作流分支</h1> <p>本地版本库当前分支维护的其实是三个区域，当前开发目录，缓存区Index，分支树head。</p> <p>本地开发的过程中，先要拉取远程的最新代码，开发完后修改内容先提交到缓存区，再提交到版本库，然后将本地版本提交到远程库。</p> <p>相关命令：</p> <ul><li>git pull  先拉取远程库里面最新代码</li> <li>git add . 将本地所有改动提交到缓存区</li> <li>git commit -m &quot;版本说明&quot; 将本地缓存区内容提交到版本库</li> <li>git push 将本地版本库提交到远程</li></ul> <p>这样一个工作流程结束。当然 git add 加具体的文件名可以提交某一个文件到缓存区，但是我是用的不多。</p> <p>实际工作中，常用的差不多就这么多。</p> <h1 id="总结"><a href="#总结" aria-hidden="true" class="header-anchor">#</a> 总结</h1> <p>个人平时用到的工作流程</p> <ol><li>安装：官网下载，然后下一步</li> <li>检出：git clone https://username:password@path.git</li> <li>切换并绑定远程分支:git checkout -t origin/develop</li> <li>拉去最新代码：git pull</li> <li>添加更新：git add .</li> <li>添加版本: git commit -m &quot;版本说明&quot;</li> <li>推送远程：git push</li></ol> <p>工作中平时就是4567来回走。</p> <h1 id="更多"><a href="#更多" aria-hidden="true" class="header-anchor">#</a> 更多</h1> <p>更多其他用法多了去了。下面贴上比较完整命令供参考</p> <div class="language- line-numbers-mode"><pre class="language-text"><code># 在当前目录新建一个Git代码库
+$ git init
+
+# 新建一个目录，将其初始化为Git代码库
+$ git init [project-name]
+
+# 下载一个项目和它的整个代码历史
+$ git clone [url]
+
+# 显示当前的Git配置
+$ git config --list
+
+# 编辑Git配置文件
+$ git config -e [--global]
+
+# 设置提交代码时的用户信息
+$ git config [--global] user.name &quot;[name]&quot;
+$ git config [--global] user.email &quot;[email address]&quot;
+
+# 添加指定文件到暂存区
+$ git add [file1] [file2] ...
+
+# 添加指定目录到暂存区，包括子目录
+$ git add [dir]
+
+# 添加当前目录的所有文件到暂存区
+$ git add .
+
+# 添加每个变化前，都会要求确认
+# 对于同一个文件的多处变化，可以实现分次提交
+$ git add -p
+
+# 删除工作区文件，并且将这次删除放入暂存区
+$ git rm [file1] [file2] ...
+
+# 停止追踪指定文件，但该文件会保留在工作区
+$ git rm --cached [file]
+
+# 改名文件，并且将这个改名放入暂存区
+$ git mv [file-original] [file-renamed]
+
+# 提交暂存区到仓库区
+$ git commit -m [message]
+
+# 提交暂存区的指定文件到仓库区
+$ git commit [file1] [file2] ... -m [message]
+
+# 提交工作区自上次commit之后的变化，直接到仓库区
+$ git commit -a
+
+# 提交时显示所有diff信息
+$ git commit -v
+
+# 使用一次新的commit，替代上一次提交
+# 如果代码没有任何新变化，则用来改写上一次commit的提交信息
+$ git commit --amend -m [message]
+
+# 重做上一次commit，并包括指定文件的新变化
+$ git commit --amend [file1] [file2] ...
+
+# 列出所有本地分支
+$ git branch
+
+# 列出所有远程分支
+$ git branch -r
+
+# 列出所有本地分支和远程分支
+$ git branch -a
+
+# 新建一个分支，但依然停留在当前分支
+$ git branch [branch-name]
+
+# 新建一个分支，并切换到该分支
+$ git checkout -b [branch]
+
+# 新建一个分支，指向指定commit
+$ git branch [branch] [commit]
+
+# 新建一个分支，与指定的远程分支建立追踪关系
+$ git branch --track [branch] [remote-branch]
+
+# 切换到指定分支，并更新工作区
+$ git checkout [branch-name]
+
+# 切换到上一个分支
+$ git checkout -
+
+# 建立追踪关系，在现有分支与指定的远程分支之间
+$ git branch --set-upstream [branch] [remote-branch]
+
+# 合并指定分支到当前分支
+$ git merge [branch]
+
+# 选择一个commit，合并进当前分支
+$ git cherry-pick [commit]
+
+# 删除分支
+$ git branch -d [branch-name]
+
+# 删除远程分支
+$ git push origin --delete [branch-name]
+$ git branch -dr [remote/branch]
+
+# 列出所有tag
+$ git tag
+
+# 新建一个tag在当前commit
+$ git tag [tag]
+
+# 新建一个tag在指定commit
+$ git tag [tag] [commit]
+
+# 删除本地tag
+$ git tag -d [tag]
+
+# 删除远程tag
+$ git push origin :refs/tags/[tagName]
+
+# 查看tag信息
+$ git show [tag]
+
+# 提交指定tag
+$ git push [remote] [tag]
+
+# 提交所有tag
+$ git push [remote] --tags
+
+# 新建一个分支，指向某个tag
+$ git checkout -b [branch] [tag]
+
+# 显示有变更的文件
+$ git status
+
+# 显示当前分支的版本历史
+$ git log
+
+# 显示commit历史，以及每次commit发生变更的文件
+$ git log --stat
+
+# 搜索提交历史，根据关键词
+$ git log -S [keyword]
+
+# 显示某个commit之后的所有变动，每个commit占据一行
+$ git log [tag] HEAD --pretty=format:%s
+
+# 显示某个commit之后的所有变动，其&quot;提交说明&quot;必须符合搜索条件
+$ git log [tag] HEAD --grep feature
+
+# 显示某个文件的版本历史，包括文件改名
+$ git log --follow [file]
+$ git whatchanged [file]
+
+# 显示指定文件相关的每一次diff
+$ git log -p [file]
+
+# 显示过去5次提交
+$ git log -5 --pretty --oneline
+
+# 显示所有提交过的用户，按提交次数排序
+$ git shortlog -sn
+
+# 显示指定文件是什么人在什么时间修改过
+$ git blame [file]
+
+# 显示暂存区和工作区的代码差异
+$ git diff
+
+# 显示暂存区和上一个commit的差异
+$ git diff --cached [file]
+
+# 显示工作区与当前分支最新commit之间的差异
+$ git diff HEAD
+
+# 显示两次提交之间的差异
+$ git diff [first-branch]...[second-branch]
+
+# 显示今天你写了多少行代码
+$ git diff --shortstat &quot;@{0 day ago}&quot;
+
+# 显示某次提交的元数据和内容变化
+$ git show [commit]
+
+# 显示某次提交发生变化的文件
+$ git show --name-only [commit]
+
+# 显示某次提交时，某个文件的内容
+$ git show [commit]:[filename]
+
+# 显示当前分支的最近几次提交
+$ git reflog
+
+# 从本地master拉取代码更新当前分支：branch 一般为master
+$ git rebase [branch]
+
+# 下载远程仓库的所有变动
+$ git fetch [remote]
+
+# 显示所有远程仓库
+$ git remote -v
+
+# 显示某个远程仓库的信息
+$ git remote show [remote]
+
+# 增加一个新的远程仓库，并命名
+$ git remote add [shortname] [url]
+
+# 取回远程仓库的变化，并与本地分支合并
+$ git pull [remote] [branch]
+
+# 上传本地指定分支到远程仓库
+$ git push [remote] [branch]
+
+# 强行推送当前分支到远程仓库，即使有冲突
+$ git push [remote] --force
+
+# 推送所有分支到远程仓库
+$ git push [remote] --all
+
+# 恢复暂存区的指定文件到工作区
+$ git checkout [file]
+
+# 恢复某个commit的指定文件到暂存区和工作区
+$ git checkout [commit] [file]
+
+# 恢复暂存区的所有文件到工作区
+$ git checkout .
+
+# 重置暂存区的指定文件，与上一次commit保持一致，但工作区不变
+$ git reset [file]
+
+# 重置暂存区与工作区，与上一次commit保持一致
+$ git reset --hard
+
+# 重置当前分支的指针为指定commit，同时重置暂存区，但工作区不变
+$ git reset [commit]
+
+# 重置当前分支的HEAD为指定commit，同时重置暂存区和工作区，与指定commit一致
+$ git reset --hard [commit]
+
+# 重置当前HEAD为指定commit，但保持暂存区和工作区不变
+$ git reset --keep [commit]
+
+# 新建一个commit，用来撤销指定commit
+# 后者的所有变化都将被前者抵消，并且应用到当前分支
+$ git revert [commit]
+
+# 暂时将未提交的变化移除，稍后再移入
+$ git stash
+$ git stash pop
+
+# 生成一个可供发布的压缩包
+$ git archive
+
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br><span class="line-number">143</span><br><span class="line-number">144</span><br><span class="line-number">145</span><br><span class="line-number">146</span><br><span class="line-number">147</span><br><span class="line-number">148</span><br><span class="line-number">149</span><br><span class="line-number">150</span><br><span class="line-number">151</span><br><span class="line-number">152</span><br><span class="line-number">153</span><br><span class="line-number">154</span><br><span class="line-number">155</span><br><span class="line-number">156</span><br><span class="line-number">157</span><br><span class="line-number">158</span><br><span class="line-number">159</span><br><span class="line-number">160</span><br><span class="line-number">161</span><br><span class="line-number">162</span><br><span class="line-number">163</span><br><span class="line-number">164</span><br><span class="line-number">165</span><br><span class="line-number">166</span><br><span class="line-number">167</span><br><span class="line-number">168</span><br><span class="line-number">169</span><br><span class="line-number">170</span><br><span class="line-number">171</span><br><span class="line-number">172</span><br><span class="line-number">173</span><br><span class="line-number">174</span><br><span class="line-number">175</span><br><span class="line-number">176</span><br><span class="line-number">177</span><br><span class="line-number">178</span><br><span class="line-number">179</span><br><span class="line-number">180</span><br><span class="line-number">181</span><br><span class="line-number">182</span><br><span class="line-number">183</span><br><span class="line-number">184</span><br><span class="line-number">185</span><br><span class="line-number">186</span><br><span class="line-number">187</span><br><span class="line-number">188</span><br><span class="line-number">189</span><br><span class="line-number">190</span><br><span class="line-number">191</span><br><span class="line-number">192</span><br><span class="line-number">193</span><br><span class="line-number">194</span><br><span class="line-number">195</span><br><span class="line-number">196</span><br><span class="line-number">197</span><br><span class="line-number">198</span><br><span class="line-number">199</span><br><span class="line-number">200</span><br><span class="line-number">201</span><br><span class="line-number">202</span><br><span class="line-number">203</span><br><span class="line-number">204</span><br><span class="line-number">205</span><br><span class="line-number">206</span><br><span class="line-number">207</span><br><span class="line-number">208</span><br><span class="line-number">209</span><br><span class="line-number">210</span><br><span class="line-number">211</span><br><span class="line-number">212</span><br><span class="line-number">213</span><br><span class="line-number">214</span><br><span class="line-number">215</span><br><span class="line-number">216</span><br><span class="line-number">217</span><br><span class="line-number">218</span><br><span class="line-number">219</span><br><span class="line-number">220</span><br><span class="line-number">221</span><br><span class="line-number">222</span><br><span class="line-number">223</span><br><span class="line-number">224</span><br><span class="line-number">225</span><br><span class="line-number">226</span><br><span class="line-number">227</span><br><span class="line-number">228</span><br><span class="line-number">229</span><br><span class="line-number">230</span><br><span class="line-number">231</span><br><span class="line-number">232</span><br><span class="line-number">233</span><br><span class="line-number">234</span><br><span class="line-number">235</span><br><span class="line-number">236</span><br><span class="line-number">237</span><br><span class="line-number">238</span><br><span class="line-number">239</span><br><span class="line-number">240</span><br><span class="line-number">241</span><br><span class="line-number">242</span><br><span class="line-number">243</span><br><span class="line-number">244</span><br><span class="line-number">245</span><br><span class="line-number">246</span><br><span class="line-number">247</span><br><span class="line-number">248</span><br><span class="line-number">249</span><br><span class="line-number">250</span><br><span class="line-number">251</span><br><span class="line-number">252</span><br><span class="line-number">253</span><br></div></div><h1 id="文末"><a href="#文末" aria-hidden="true" class="header-anchor">#</a> 文末</h1> <p>说到底，这就是个工具，半天看看就行了。录入命令熟了就行了。遇到问题，具体再翻翻问题再具体翻翻文档。
+几乎所有IDE工具都搭载git环境，直接配置好就行，用的也挺好。不过个人感觉没有命令行看着清晰，而且电脑配置一般的话，也会卡。看官您根据自己想法来就行！</p></div> <div class="page-edit"><div class="edit-link"><a href="https://github.com/vuejs/vuepress/edit/master/docs/tools/git.md" target="_blank" rel="noopener noreferrer">帮助我们改善此页面！</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></div> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">10/10/2018, 5:51:06 PM</span></div></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/docs/core/Vuex.html" class="prev">
+          状态Vuex
+        </a></span> <span class="next"><a href="/docs/tools/webpack.html">
+          webpack
+        </a>
+        →
+      </span></p></div> </div> <!----></div></div>
+    <script src="/docs/assets/js/12.daa5deb7.js" defer></script><script src="/docs/assets/js/app.e8e3fc9d.js" defer></script>
+  </body>
+</html>
